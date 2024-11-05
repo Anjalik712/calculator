@@ -18,11 +18,10 @@ function divide(a, b) {
     return a / b;
   }
 }
-
 function operate(op1, op2, operator) {
-  displayValue = "";
   let result = 0;
-  updateDisplay();
+  op1=+op1;
+  op2=+op2;
   switch (operator) {
     case "+":
       result = add(op1, op2);
@@ -37,25 +36,21 @@ function operate(op1, op2, operator) {
       result = divide(op1, op2);
       break;
   }
-  if (result % 1 != 0) result = result.toFixed(3);
+  if (result % 1 != 0) Math.round(result * 1000) / 1000;
   return result;
 }
-let displayValue = "";
+
 let op1 = null;
-let operator = null;
-let operator2 = null;
 let op2 = null;
-const oprt = ["+", "-", "*", "/"];
-let op2start;
+let currentOperation=null;
+let shouldResetScreen=false;
+
+const currentOperationBox=document.querySelector(".currentoperationbox");
+const previousOperationBox=document.querySelector(".previousoperationbox")
 
 const buttons = document.querySelectorAll("button");
 
 const display = document.querySelector(".display");
-
-function updateDisplay() {
-  display.textContent = displayValue;
-}
-updateDisplay();
 
 for (let i = 0; i < buttons.length; i++) {
   buttons[i].addEventListener("click", function () {
@@ -64,7 +59,7 @@ for (let i = 0; i < buttons.length; i++) {
     } else if (buttons[i].classList.contains("operator")) {
       handleOperator(buttons[i].innerText);
     } else if (buttons[i].classList.contains("equal")) {
-      handleEqual();
+      evaluate();
     } else if (buttons[i].classList.contains("clear")) {
       handleClear();
     } else if (buttons[i].classList.contains("allclear")) {
@@ -77,42 +72,59 @@ for (let i = 0; i < buttons.length; i++) {
   });
 }
 
-function handleOperand(operand) {
-  displayValue += operand;
-  updateDisplay();
+
+function resetScreen(){
+    currentOperationBox.textContent="";
+    shouldResetScreen=false;
 }
 
-function handleOperator(symbol) {
-  displayValue = displayValue + symbol;
-  updateDisplay();
-  operator = symbol;
-  op2start = displayValue.indexOf(symbol) + 1;
-  if (displayValue != "=") {
-    op1 = +displayValue.slice(0, -1);
-  }
+function handleOperand(num){
+    if(currentOperationBox.textContent==='0'||shouldResetScreen){
+        resetScreen();;
+    }
+    currentOperationBox.textContent+=num;
 }
 
-function handleClear() {
-  displayValue = displayValue.slice(0, -1);
-  updateDisplay();
+function handleOperator(symbol){
+    if(currentOperation!==null) 
+        evaluate();
+    op1=currentOperationBox.textContent;
+    currentOperation=symbol;
+    previousOperationBox.textContent=`${op1} ${currentOperation}`;
+    shouldResetScreen=true;
 }
 
-function handleAllClear() {
-  displayValue = "";
-  updateDisplay();
+function evaluate(){
+    if (currentOperation===null||shouldResetScreen)
+        return;
+    op2=currentOperationBox.textContent;
+    currentOperationBox.textContent=operate(op1,op2,currentOperation);
+    previousOperationBox.textContent=`${op1} ${currentOperation} ${op2} =`;
+    currentOperation=null;
 }
 
-function handleEqual() {
-  displayValue += "=";
-  updateDisplay();
-  let op2end = displayValue.indexOf("=");
-  op2 = displayValue.slice(op2start, op2end);
-  op2 = +op2;
-  displayValue = operate(op1, op2, operator);
-  updateDisplay();
+function handleAllClear(){
+    currentOperationBox.textContent="0";
+    previousOperationBox.textContent="";
+    op1='';
+    op2='';
+    currentOperation=null;
 }
 
-function handleSign() {
-  displayValue = displayValue * -1;
-  updateDisplay();
+function handleClear(){
+    currentOperationBox.textContent=currentOperationBox.textContent.toString().slice(0,-1);
+}
+
+function handleDecimal(){
+    if(shouldResetScreen)
+        resetScreen();
+    if(currentOperationBox.textContent==="")
+        currentOperationBox.textContent='0';
+    if(!currentOperationBox.textContent.includes('.'))
+        currentOperationBox.textContent+='.';
+}
+
+function handleSign(){
+    let num=+currentOperationBox.textContent;
+    currentOperationBox.textContent=`${num*-1}`;
 }
