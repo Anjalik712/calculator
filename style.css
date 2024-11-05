@@ -1,8 +1,14 @@
+*{
+    border-radius: 5px;
+    padding: 5px;
+    box-sizing: content-box;
+}
 .calculator{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    
 }
 .container{
     display: flex;
@@ -12,18 +18,62 @@
     gap: 5px;
     border: 3px solid rgb(53, 7, 7);
     padding: 5px;
+    background-color: rgb(0, 0, 0);
 }
 button{
     width: 40px;
     height: 30px;
+    border: 0px;
+    font-size: 20px;
+    color: darkslategray;
 }
 #zero{
-    width: 85px;
+    width: 95px;
 }
 .display{
-    border: 1px solid rgb(53, 7, 7);
-    width:172px;
-    height: 50px;
-    text-align: right;
-    align-content: center;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid rgb(85, 83, 83);
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+    text-align: end;
+
+}
+.previousoperationbox{
+    font-size: 20px;
+    border: 2px solid grey;
+    min-height: 30px;
+    min-width: 95%;
+    color: rgb(94, 93, 93);
+    background-color: rgb(236, 235, 235);
+}
+
+.currentoperationbox{
+    font-size: 60px;
+    border: 2px solid rgb(86, 85, 85);
+    min-width: 95%;
+    color: rgb(227, 212, 212);
+}
+.num{
+    background-color: rgb(252, 181, 3);
+}
+.operator{
+    background-color: rgba(146, 250, 146, 0.644) ;
+}
+.allclear{
+    background-color: rgb(114, 114, 205);
+}
+.clear{
+    background-color: rgb(148, 97, 196);
+}
+.sign{
+    background-color: wheat;
+}
+.decimal{
+    background-color: rgb(158, 242, 214);
+}
+.equal{
+    background-color: thistle;
 }
